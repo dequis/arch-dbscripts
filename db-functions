@@ -385,6 +385,9 @@ check_pkgsvn() {
 
 	in_array "${repo}" ${PKGREPOS[@]} || return 1
 
+	# remove debug suffix for svn check
+	repo=${repo%-debug}
+
 	if [ ! -f "${WORKDIR}/pkgbuilds/${repo}-${_pkgarch}/${_pkgbase}" ]; then
 		mkdir -p "${WORKDIR}/pkgbuilds/${repo}-${_pkgarch}"
 		arch_svn export -q "${SVNREPO}/${_pkgbase}/repos/${repo}-${_pkgarch}/PKGBUILD" \

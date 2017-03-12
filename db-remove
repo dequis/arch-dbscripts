@@ -48,5 +48,6 @@ done
 
 for tarch in ${tarches[@]}; do
 	arch_repo_remove "${repo}" "${tarch}" ${remove_pkgs[@]}
+	arch_repo_remove "${repo}-debug" "${tarch}" ${remove_pkgs[@]/%/-debug}
 	repo_unlock $repo $tarch
 done

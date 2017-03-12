@@ -1,10 +1,12 @@
-PKGREPOS=('community' 'community-testing' 'community-staging' 'multilib' 'multilib-testing' 'multilib-staging')
+PKGREPOS=('community' 'community-debug' 'community-testing' 'community-testing-debug'
+          'community-staging' 'community-staging-debug' 'multilib' 'multilib-debug'
+          'multilib-testing' 'multilib-testing-debug' 'multilib-staging' 'multilib-staging-debug')
 PKGPOOL='pool/community'
 SRCPOOL='sources/community'
 SVNREPO='file:///srv/repos/svn-community/svn'
 SVNUSER='svn-community'
 TESTING_REPO='community-testing'
-STABLE_REPOS=('community')
+STABLE_REPOS=('community' 'community-debug)
 
 CLEANUP_DESTDIR="/srv/repos/svn-community/package-cleanup"
 SOURCE_CLEANUP_DESTDIR="/srv/repos/svn-community/source-cleanup"

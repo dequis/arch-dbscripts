@@ -16,7 +16,7 @@ fi
 
 repos=()
 for staging_repo in ${staging_repos[@]##*/}; do
-	if in_array ${staging_repo} ${PKGREPOS[@]}; then
+	if in_array ${staging_repo} ${PKGREPOS[@]} ${PKGREPOS[@]/%/-debug}; then
 		repos+=(${staging_repo})
 	fi
 done
@@ -61,9 +61,12 @@ for repo in ${repos[@]}; do
 				die "Package ${repo}/${pkg##*/} was not built in a chroot"
 			fi
 		done
-		if ! check_splitpkgs ${repo} ${pkgs[@]}; then
-			die "Missing split packages for ${repo}"
+		if [[ $repo != *-debug ]]; then
+			if ! check_splitpkgs ${repo} ${pkgs[@]}; then
+				die "Missing split packages for ${repo}"
+			fi
 		fi
+		# TODO: add check that non-debug version of debug packages exist
 	else
 		die "Could not read ${STAGING}"
 	fi

@@ -1,10 +1,12 @@
-PKGREPOS=('core' 'extra' 'testing' 'staging' 'kde-unstable' 'gnome-unstable')
+PKGREPOS=('core' 'core-debug' 'extra' 'extra-debug'
+          'testing' 'testing-debug' 'staging' 'staging-debug'
+          'kde-unstable' 'kde-unstable-debug' 'gnome-unstable' 'gnome-unstable-debug')
 PKGPOOL='pool/packages'
 SRCPOOL='sources/packages'
 SVNREPO='file:///srv/repos/svn-packages/svn'
 SVNUSER='svn-packages'
 TESTING_REPO='testing'
-STABLE_REPOS=('core' 'extra')
+STABLE_REPOS=('core' 'core-debug' 'extra' 'extra-debug')
 
 CLEANUP_DESTDIR="/srv/repos/svn-packages/package-cleanup"
 SOURCE_CLEANUP_DESTDIR="/srv/repos/svn-packages/source-cleanup"
