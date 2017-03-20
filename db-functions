@@ -261,6 +261,19 @@ issplitpkg() {
 	fi
 }
 
+isdebugpkg() {
+	local _name
+	local _base
+
+	_name="$(_grep_pkginfo "$1" "pkgname")"
+	_base="$(_grep_pkginfo "$1" "pkgbase")"
+	if [ "$_base-debug" = "$_name" ]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
 # Get the package name
 getpkgname() {
 	local _name
@@ -386,7 +399,7 @@ check_pkgsvn() {
 	in_array "${repo}" ${PKGREPOS[@]} || return 1
 
 	# remove debug suffix for svn check
-	repo=${repo%-debug}
+	#repo=${repo%-debug}
 
 	if [ ! -f "${WORKDIR}/pkgbuilds/${repo}-${_pkgarch}/${_pkgbase}" ]; then
 		mkdir -p "${WORKDIR}/pkgbuilds/${repo}-${_pkgarch}"
@@ -399,7 +412,7 @@ check_pkgsvn() {
 	[ "${svnver}" == "${_pkgver}" ] || return 1
 
 	local svnnames=($(. "${WORKDIR}/pkgbuilds/${repo}-${_pkgarch}/${_pkgbase}"; echo ${pkgname[@]}))
-	in_array "${_pkgname}" ${svnnames[@]} || return 1
+	in_array "${_pkgname}" ${svnnames[@]} ${svnnames[@]/%/-debug} || return 1
 
 	return 0
 }
@@ -417,6 +430,7 @@ check_splitpkgs() {
 
 	for pkgfile in ${pkgfiles[@]}; do
 		issplitpkg "${pkgfile}" || continue
+		isdebugpkg "${pkgfile}" && continue
 		local _pkgbase="$(getpkgbase ${pkgfile})"
 		local _pkgname="$(getpkgname ${pkgfile})"
 		local _pkgarch="$(getpkgarch ${pkgfile})"

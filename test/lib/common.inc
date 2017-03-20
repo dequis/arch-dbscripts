@@ -54,7 +54,7 @@ oneTimeSetUp() {
 			fi
 			for a in ${pkgarch[@]}; do
 				for p in ${pkgname[@]}; do
-					cp ${p}-${pkgversion}-${a}${PKGEXT} $(dirname ${BASH_SOURCE[0]})/../packages/${d##*/}
+					cp ${p}{,-debug}-${pkgversion}-${a}${PKGEXT} $(dirname ${BASH_SOURCE[0]})/../packages/${d##*/}
 				done
 			done
 		fi
@@ -76,7 +76,7 @@ setUp() {
 	TMP="$(mktemp -d /tmp/${0##*/}.XXXXXXXXXX)"
 	#msg "Using ${TMP}"
 
-	PKGREPOS=('core' 'extra' 'testing')
+	PKGREPOS=('core' 'core-debug' 'extra' 'extra-debug' 'testing' 'testing-debug')
 	PKGPOOL='pool/packages'
 	mkdir -p "${TMP}/"{ftp,tmp,staging,{package,source}-cleanup,svn-packages-{copy,repo}}
 
@@ -107,7 +107,7 @@ setUp() {
 	PKGREPOS=(${PKGREPOS[@]})
 	PKGPOOL="${PKGPOOL}"
 	TESTING_REPO='testing'
-	STABLE_REPOS=('core' 'extra')
+	STABLE_REPOS=('core' 'core-debug' 'extra' 'extra-debug')
 	CLEANUP_DESTDIR="${TMP}/package-cleanup"
 	SOURCE_CLEANUP_DESTDIR="${TMP}/source-cleanup"
 	STAGING="${TMP}/staging"
@@ -133,6 +133,7 @@ releasePackage() {
 	local p
 	local pkgver
 	local pkgname
+	local filename
 
 	pushd "${TMP}/svn-packages-copy"/${pkgbase}/trunk/ >/dev/null
 	archrelease ${repo}-${arch} >/dev/null 2>&1
@@ -143,8 +144,13 @@ releasePackage() {
 
 	if ${REQUIRE_SIGNATURE}; then
 		for a in ${arch[@]}; do
-			for p in ${pkgname[@]}; do
-				signpkg "${STAGING}"/${repo}/${p}-${pkgver}-${a}${PKGEXT}
+			for p in ${pkgname[@]} ${pkgname[@]/%/-debug}; do
+				filename="${STAGING}"/${repo}/${p}-${pkgver}-${a}${PKGEXT}
+				if [ -e $filename ]; then
+					signpkg "${filename}"
+				elif [[ $p != *-debug ]]; then
+					die "Package $filename not found"
+				fi
 			done
 		done
 	fi

@@ -16,7 +16,7 @@ fi
 
 repos=()
 for staging_repo in ${staging_repos[@]##*/}; do
-	if in_array ${staging_repo} ${PKGREPOS[@]} ${PKGREPOS[@]/%/-debug}; then
+	if in_array ${staging_repo} ${PKGREPOS[@]}; then
 		repos+=(${staging_repo})
 	fi
 done
@@ -97,6 +97,7 @@ for repo in ${repos[@]}; do
 		done
 		if [ ${#add_pkgs[@]} -ge 1 ]; then
 			arch_repo_add "${repo}" "${pkgarch}" ${add_pkgs[@]}
+			#arch_repo_add "${repo}"-debug "${pkgarch}"
 		fi
 	done
 done

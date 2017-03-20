@@ -6,7 +6,7 @@ SRCPOOL='sources/community'
 SVNREPO='file:///srv/repos/svn-community/svn'
 SVNUSER='svn-community'
 TESTING_REPO='community-testing'
-STABLE_REPOS=('community' 'community-debug)
+STABLE_REPOS=('community' 'community-debug')
 
 CLEANUP_DESTDIR="/srv/repos/svn-community/package-cleanup"
 SOURCE_CLEANUP_DESTDIR="/srv/repos/svn-community/source-cleanup"

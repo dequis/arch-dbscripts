@@ -30,6 +30,7 @@ for tarch in ${tarches[@]}; do
 done
 
 remove_pkgs=()
+remove_debug_pkgs=()
 for pkgbase in ${pkgbases[@]}; do
 	msg "Removing $pkgbase from [$repo]..."
 	arch_svn checkout -q "${SVNREPO}/${pkgbase}" "${WORKDIR}/svn/${pkgbase}" >/dev/null
@@ -48,6 +49,6 @@ done
 
 for tarch in ${tarches[@]}; do
 	arch_repo_remove "${repo}" "${tarch}" ${remove_pkgs[@]}
-	arch_repo_remove "${repo}-debug" "${tarch}" ${remove_pkgs[@]/%/-debug}
+	arch_repo_remove "${repo}-debug" "${tarch}" ${remove_debug_pkgs[@]/%/-debug}
 	repo_unlock $repo $tarch
 done
